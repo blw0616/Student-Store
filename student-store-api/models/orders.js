@@ -6,8 +6,14 @@ const getAllOrders = async () => {
 };
 
 const getOrderByID = async (id) => {
-    return prisma.order.findUnique({ where: {id: parseInt(id)} });
+    return prisma.order.findUnique({
+        where: { id: parseInt(id) },
+        include: {
+            order_items: true, // Include associated order items
+        },
+    });
 };
+
 
 const createOrder = async (orderData) => {
     return prisma.order.create({ data: orderData});
