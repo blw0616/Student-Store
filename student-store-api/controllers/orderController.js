@@ -1,6 +1,6 @@
-const productModel = require("../models/product")
+const productModel = require("../models/orders")
 
-const getAllProducts = async (req, res) => {
+const getAllOrders = async (req, res) => {
 const { category, price, name, sort } = req.query;
 let filter = {};
 let orderBy = {};
