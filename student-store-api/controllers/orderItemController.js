@@ -11,7 +11,7 @@ try {
 
 const getOrderItemByID = async (req, res) => {
 try {
-    const orderItem = await orderModel.getOrderItemByID(req.params.id);
+    const orderItem = await orderItemModel.getOrderItemByID(req.params.id);
     if (orderItem) {
     res.status(200).json(orderItem);
     } else {
@@ -25,7 +25,7 @@ try {
 //Function to create a new car
 const createOrderItem = async (req, res) => {
 try {
-    const newOrderItem = await orderModel.createOrderItem(req.body);
+    const newOrderItem = await orderItemModel.createOrderItem(req.body);
     res.status(201).json(newOrderItem);
 } catch (error) {
     res.status(400).json({ error: error.message });
@@ -49,7 +49,7 @@ try {
 //Function to delete a car
 const deleteOrderItem = async (req, res) => {
 try {
-    const deletedOrder = await orderModel.deleteOrderItem(req.params.id);
+    const deletedOrderItem = await orderItemModel.deleteOrderItem(req.params.id);
     if (deletedOrderItem) {
     res.status(200).json(deletedOrderItem);
     } else {

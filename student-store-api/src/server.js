@@ -3,7 +3,9 @@ const port = 3000;
 const cors = require("cors");
 const morgan = require("morgan")
 
-const productRoutes = require("/Users/bailey.williams/Documents/FTLWork/Student-Store/student-store-api/routes/productRoutes")
+const productRoutes = require("../routes/productRoutes")
+const orderRoutes = require("../routes/orderRoutes")
+const orderItemRoutes = require("../routes/OrderItemRoutes")
 
 
 //middleware
@@ -19,6 +21,8 @@ app.get("/", (req, res) =>{
 
 //add products routes here
 app.use("/products", productRoutes);
+app.use("/orders", orderRoutes);
+app.use("/orderItems", orderItemRoutes);
 
 
 app. listen(port, () => {
