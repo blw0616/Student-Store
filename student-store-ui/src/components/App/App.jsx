@@ -57,14 +57,15 @@ function App() {
     setIsCheckingOut(true);
     try {
       // Calculate total price
-      // const total_price = Object.keys(cart).reduce((total, productId) => {
-      //   const product = products.find(p => p.id === parseInt(productId));
-      //   return total + (product.price * cart[productId]);
-      // }, 0);
+      const total_price = Object.keys(cart).reduce((total, productId) => {
+        const product = products.find(p => p.id === parseInt(productId));
+        return total + (product.price * cart[productId]);
+      }, 0);
 
 
       const orderItemsData = Object.keys(cart).map(productId => 
         ({
+          
           productId: parseInt(productId), // Ensure productId is an integer
           quantity: cart[productId]
         }));
@@ -72,7 +73,7 @@ function App() {
       // Create order content
       const orderContent = {
         customer_id: parseInt(userInfo.name),
-        total_price: getTotalItemsInCart(cart),
+        total_price: total_price,
         status: "completed",
         items: orderItemsData
       };
@@ -82,7 +83,7 @@ function App() {
       setOrder(response.data);
       setIsCheckingOut(false);
       setCart({});
-      setUserInfo({name: "", dorm_number: "",});
+      setUserInfo({name: "", id: "",});
 
     } catch (error) {
       setError(error.response ? error.response.data.error : error.message);
