@@ -23,6 +23,21 @@ function App() {
   const [error, setError] = useState(null);
   const [order, setOrder] = useState(null);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsFetching(true)
+      try {
+         const response = await axios.get(`http://localhost:3000/products`);
+         setProducts(response.data);
+      } catch (error) {
+        setError(error);  
+        console.log(error);
+      }
+    }
+    
+    fetchProducts();
+  }, [])
+
   // Toggles sidebar
   const toggleSidebar = () => setSidebarOpen((isOpen) => !isOpen);
 
@@ -37,7 +52,23 @@ function App() {
   };
 
   const handleOnCheckout = async () => {
-  }
+    setIsCheckingOut(true);
+    try {
+      const orderContent = {
+        customer_id: userInfo.name,
+        items: Object.keys(cart).map(productId => ({
+          productId: productId,
+          quantity: cart[productId]
+        }))
+      };
+      const order = await axios.post(`http://localhost:3000/orders`, orderContent);
+      setIsCheckingOut(false); 
+    } catch (error) {
+      setError(error.response ? error.response.data.error : error.message);
+      setIsCheckingOut(false); 
+    }
+  };
+  
 
 
   return (
