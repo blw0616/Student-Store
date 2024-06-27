@@ -25,18 +25,19 @@ function App() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setIsFetching(true)
+      setIsFetching(true);
       try {
-         const response = await axios.get(`http://localhost:3000/products`);
-         setProducts(response.data);
+        const response = await axios.get(`http://localhost:3000/products`);
+        setProducts(response.data);
       } catch (error) {
-        setError(error);  
+        setError(error);
         console.log(error);
       }
-    }
+      setIsFetching(false);
+    };
     
     fetchProducts();
-  }, [])
+  }, []);
 
   // Toggles sidebar
   const toggleSidebar = () => setSidebarOpen((isOpen) => !isOpen);
@@ -52,24 +53,42 @@ function App() {
   };
 
   const handleOnCheckout = async () => {
+    console.log('clicked')
     setIsCheckingOut(true);
     try {
-      const orderContent = {
-        customer_id: userInfo.name,
-        items: Object.keys(cart).map(productId => ({
-          productId: productId,
+      // Calculate total price
+      // const total_price = Object.keys(cart).reduce((total, productId) => {
+      //   const product = products.find(p => p.id === parseInt(productId));
+      //   return total + (product.price * cart[productId]);
+      // }, 0);
+
+
+      const orderItemsData = Object.keys(cart).map(productId => 
+        ({
+          productId: parseInt(productId), // Ensure productId is an integer
           quantity: cart[productId]
-        }))
+        }));
+
+      // Create order content
+      const orderContent = {
+        customer_id: parseInt(userInfo.name),
+        total_price: getTotalItemsInCart(cart),
+        status: "completed",
+        items: orderItemsData
       };
-      const order = await axios.post(`http://localhost:3000/orders`, orderContent);
-      setIsCheckingOut(false); 
+      console.log(orderContent);
+      
+      const response = await axios.post(`http://localhost:3000/orders`, orderContent);
+      setOrder(response.data);
+      setIsCheckingOut(false);
+      setCart({});
+      setUserInfo({name: "", dorm_number: "",});
+
     } catch (error) {
       setError(error.response ? error.response.data.error : error.message);
-      setIsCheckingOut(false); 
+      setIsCheckingOut(false);
     }
   };
-  
-
 
   return (
     <div className="App">
@@ -147,4 +166,3 @@ function App() {
 }
 
 export default App;
- 

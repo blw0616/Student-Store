@@ -44,16 +44,19 @@ const getOrderTotal = async (orderId) => {
 };
 
 const createOrder = async (orderData) => {
+    const { customer_id, total_price, status } = orderData;
+  
     return prisma.order.create({
-        data: {
-            ...orderData,
-            order_items: {
-                create: orderData.order_items,
-            },
+        data: 
+        {
+            customer_id,
+            total_price,
+            status,
         },
-        include: {
-            order_items: true, // Include associated order items
-        },
+            include: 
+            {
+                order_items: true
+            }
     });
 };
 

@@ -21,6 +21,8 @@ function ProductDetail({ addToCart, removeFromCart, getQuantityOfItemInCart }) {
       } catch (error) {
         setError(error);  
         console.log(error);
+      }finally{
+        setIsFetching(false);
       }
     }
     
