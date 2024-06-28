@@ -59,28 +59,28 @@ function App() {
       // Calculate total price
       const total_price = Object.keys(cart).reduce((total, productId) => {
         const product = products.find(p => p.id === parseInt(productId));
-        return total + (product.price * cart[productId]);
+        return (total + (product.price * cart[productId])) * 1.0875;
       }, 0);
 
 
-      const orderItemsData = Object.keys(cart).map(productId => 
-        ({
-          
-          productId: parseInt(productId), // Ensure productId is an integer
-          quantity: cart[productId]
-        }));
-
+      
       // Create order content
       const orderContent = {
         customer_id: parseInt(userInfo.name),
         total_price: total_price,
         status: "completed",
-        items: orderItemsData
+        // items: orderItemsData
       };
       console.log(orderContent);
       
       const response = await axios.post(`http://localhost:3000/orders`, orderContent);
-      setOrder(response.data);
+      const order_id1 = response.data.id;
+      Object.keys(cart).map(async (productId) => ((
+          await axios.post(`http://localhost:3000/orders/${order_id1}/items`, { product_id: parseInt(productId),  quantity: cart[productId], price: 1})
+      )));
+        // const orderItemCreated = await axios.post(`http://localhost:3000/orders/${order_id1}/items`, orderItemsData);
+      const updatedOrder = await axios.get(`http://localhost:3000/orders/${order_id1}`)
+      setOrder(updatedOrder.data);
       setIsCheckingOut(false);
       setCart({});
       setUserInfo({name: "", id: "",});

@@ -72,9 +72,10 @@ const deleteOrder = async (req, res) => {
 
 const addOrderItems = async (req, res) => {
     try {
-        const orderItems = req.body.order_items; // Expecting an array of order items
+        const orderItems = req.body; // Expecting an array of order items
+        console.log("req.params.id", req.params.id)
         const updatedOrder = await orderModel.addOrderItems(req.params.id, orderItems);
-        res.status(200).json(updatedOrder);
+        res.status(201).json(updatedOrder);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
